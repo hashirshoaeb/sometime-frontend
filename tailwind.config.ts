@@ -14,10 +14,10 @@ const config: Config = {
       center: true,
       padding: {
         DEFAULT: '1rem',
-        sm: '2rem',
-        lg: '4rem',
-        xl: '5rem',
-        '2xl': '6rem',
+        sm: '8rem',
+        lg: '20rem',
+        xl: '24rem',
+        '2xl': '28rem',
       },
     },
     extend: {
