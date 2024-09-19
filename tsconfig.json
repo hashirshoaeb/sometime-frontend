@@ -1,9 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "noFallthroughCasesInSwitch": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictNullChecks": true,
+    // "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    // "noUnusedLocals": true,
+    "strictFunctionTypes": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -18,9 +29,21 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "lib/placeholder-data.js",
+    "scripts/seed.js",
+    "scripts/test.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
