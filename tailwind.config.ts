@@ -41,7 +41,8 @@ const config: Config = {
     },
   },
   plugins: [
-    // require('@tailwindcss/forms')({ strategy: 'class' }),
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require("daisyui")
   ],
   daisyui: {
     themes: ["light"]
