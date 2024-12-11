@@ -21,6 +21,7 @@ export function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.E
       }, 1000);
       return () => clearInterval(interval); // Cleanup timer
     }
+    return () => { }; // Return an empty cleanup function when isOpen is false
   }, [isOpen]);
 
   const handleChange = (value: string) => setOtp(value);
