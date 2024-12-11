@@ -20,6 +20,9 @@ export function Signup({ onClick }: { onClick: () => void }) {
         enableSearch={true}
         containerClass="!w-full"
         inputClass=' !w-full'
+        inputProps={{
+          autocomplete: "tel",
+        }}
       // value={phone}
       // onChange={(value: string, data: CountryData, event: React.ChangeEvent<HTMLInputElement>) => {
       //   event.preventDefault();
