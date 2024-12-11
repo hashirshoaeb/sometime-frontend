@@ -1,6 +1,6 @@
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput, { CountryData } from "react-phone-input-2";
-import { SizeBox } from "./SizeBox";
+import { SizeBox } from "../SizeBox";
 import React from "react";
 
 export function Signup({ onClick }: { onClick: () => void }) {

@@ -3,12 +3,15 @@
 import { events } from "@/database/events";
 import { EventQueueCard } from "./_components/EventQueueCard";
 import { useEffect, useState } from "react";
-import { Signup } from "@/components/Signup";
+import { Signup } from "@/components/signup/Signup";
 import { Modal, Button, useDisclosure, ModalContent } from "@nextui-org/react";
+import { OTPModal } from "@/components/signup/OTP";
 
 export function EventQueue({ uid }: { uid?: string }) {
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const loginDisclosure = useDisclosure();
+  const otpDisclosure = useDisclosure();
+
 
 
   useEffect(() => {
@@ -25,16 +28,23 @@ export function EventQueue({ uid }: { uid?: string }) {
     >
       <Navbar onClick={() => {
         console.log("Open Modal")
-        onOpen();
+        loginDisclosure.onOpen();
       }} />
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={loginDisclosure.isOpen}
+        onOpenChange={loginDisclosure.onOpenChange}
       >
         <ModalContent className="p-10">
-          <Signup onClick={() => { }} />
+          <Signup onClick={() => {
+            otpDisclosure.onOpen();
+          }} />
         </ModalContent>
       </Modal>
+      <OTPModal
+        isOpen={otpDisclosure.isOpen}
+        onClose={otpDisclosure.onClose}
+        phoneNumber="+1234567890"
+      />
       <div
         className=" container flex flex-col gap-4"
       >
