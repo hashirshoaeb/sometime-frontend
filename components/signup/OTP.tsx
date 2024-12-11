@@ -45,6 +45,7 @@ export function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.E
             value={otp}
             onChange={handleChange}
             numInputs={4}
+            inputType="number"
             // isInputNum
             shouldAutoFocus={true}
             inputStyle={{
@@ -60,7 +61,7 @@ export function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.E
               return (
                 <input
                   {...inputProps}
-                  type="number"
+                  // type="number"
                   placeholder="0"
                   maxLength={1}
                   key={index}
