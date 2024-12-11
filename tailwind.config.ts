@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { nextui } from "@nextui-org/react";
 
 // https://stackoverflow.com/a/76919264/16220781
 const config: Config = {
@@ -41,7 +42,7 @@ const config: Config = {
     },
   },
   plugins: [
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    nextui(),
     require("daisyui")
   ],
   daisyui: {
