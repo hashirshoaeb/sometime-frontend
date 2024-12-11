@@ -31,6 +31,7 @@ export function EventQueue({ uid }: { uid?: string }) {
         loginDisclosure.onOpen();
       }} />
       <Modal
+        placement="bottom"
         isOpen={loginDisclosure.isOpen}
         onOpenChange={loginDisclosure.onOpenChange}
       >
