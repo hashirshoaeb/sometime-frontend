@@ -2,9 +2,14 @@
 
 import { events } from "@/database/events";
 import { EventQueueCard } from "./_components/EventQueueCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Signup } from "@/components/Signup";
+import { Modal, Button, useDisclosure, ModalContent } from "@nextui-org/react";
 
 export function EventQueue({ uid }: { uid?: string }) {
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
 
   useEffect(() => {
     if (uid) {
@@ -16,10 +21,47 @@ export function EventQueue({ uid }: { uid?: string }) {
   }, [uid]);
 
   return (
-    <div className=" container flex flex-col gap-4">
-      {events.map((event) => (
-        <EventQueueCard id={event.id} key={event.id} event={event} />
-      ))}
+    <div
+    >
+      <Navbar onClick={() => {
+        console.log("Open Modal")
+        onOpen();
+      }} />
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent className="p-10">
+          <Signup onClick={() => { }} />
+        </ModalContent>
+      </Modal>
+      <div
+        className=" container flex flex-col gap-4"
+      >
+        {events.map((event) => (
+          <EventQueueCard id={event.id} key={event.id} event={event} />
+        ))}
+      </div>
     </div>
   );
 }
+
+
+function Navbar({ onClick }: { onClick: () => void }) {
+  return (
+    <nav className=" p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className=" text-lg font-semibold">
+          ST
+        </div>
+        <div>
+          <button onClick={onClick} className="bg-black text-white py-2 px-4 rounded-full">
+            Login / Signup
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
