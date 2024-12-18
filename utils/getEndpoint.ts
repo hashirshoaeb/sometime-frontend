@@ -1,12 +1,31 @@
 "use server";
 
 import { QueryParams } from "@/types/QueryParams";
-import { Endpoint } from "./endpoint";
+import { Endpoint, EndpointType } from "./endpoint";
 import { environment } from "./environment/serverEnvironment";
 
-export async function getEndpoint({ queryParams = {}, ...props }: { endpoint: keyof typeof Endpoint, queryParams: QueryParams, version: "v1" }) {
+export async function getEndpoint({
+  queryParams = {},
+  pathParams = [],
+  ...props
+}: {
+  endpoint: EndpointType;
+  pathParams?: string[];
+  queryParams: QueryParams;
+  version: "v1";
+}) {
   const baseUrl = environment.apiBaseUrl;
-  const apiUrl = new URL(`${baseUrl}/${props.version}/api/${Endpoint[props.endpoint]}`);
+  const endpointValue = Endpoint[props.endpoint];
+  let apiUrl: URL;
+  if (typeof endpointValue === "string") {
+    apiUrl = new URL(`${baseUrl}/${props.version}/api/${endpointValue}`);
+  } else if (typeof endpointValue === "function") {
+    apiUrl = new URL(
+      `${baseUrl}/${props.version}/api/${endpointValue(...pathParams)}`
+    );
+  } else {
+    throw new Error("Invalid endpoint");
+  }
   // Append query parameters if any
   Object.entries(queryParams).forEach(([key, value]) => {
     if (value !== undefined) {
