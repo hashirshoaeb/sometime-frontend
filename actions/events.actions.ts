@@ -10,6 +10,6 @@ export async function getEvents(): Promise<Event[]> {
   // } catch (error: any) {
   //   throw new Exception(error);
   // }
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  await new Promise((resolve) => setTimeout(resolve, 1500));
   return events;
 }

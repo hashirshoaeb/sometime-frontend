@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const packageJson = require('./package.json');
+const packageJson = require("./package.json");
 const nextConfig = {
   // reactStrictMode: false,
   env: {
@@ -8,8 +8,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**', // Allow images from any hostname
+        protocol: "https",
+        hostname: "**", // Allow images from any hostname
       },
     ],
   },

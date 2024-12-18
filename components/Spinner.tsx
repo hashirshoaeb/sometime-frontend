@@ -7,5 +7,9 @@ export const Spinner = ({
   size?: "xs" | "sm" | "md" | "lg";
   position?: "absolute" | "fixed";
 }) => {
-  return <span className={`loading loading-spinner loading-${size} ${position}`}></span>;
+  return (
+    <span
+      className={`loading loading-spinner loading-${size} ${position}`}
+    ></span>
+  );
 };

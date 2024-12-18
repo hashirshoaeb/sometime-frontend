@@ -12,7 +12,7 @@ interface FetchOptions extends RequestInit {
 }
 
 class FetchWrapper {
-  constructor() { }
+  constructor() {}
 
   private async request({
     endpoint,
@@ -163,12 +163,24 @@ class FetchWrapper {
     return await response.json();
   }
 
-  async postMultipartPatch({ endpoint, data, options = {} }: { endpoint: keyof typeof Endpoint, data: FormData, options?: Omit<FetchOptions, 'method' | 'data'> }) {
-    const completeUrl = await getEndpoint({ endpoint: endpoint, queryParams: {}, version: 'v1' });
+  async postMultipartPatch({
+    endpoint,
+    data,
+    options = {},
+  }: {
+    endpoint: keyof typeof Endpoint;
+    data: FormData;
+    options?: Omit<FetchOptions, "method" | "data">;
+  }) {
+    const completeUrl = await getEndpoint({
+      endpoint: endpoint,
+      queryParams: {},
+      version: "v1",
+    });
     const { headers = {}, ...restOptions } = options;
 
     const response = await fetch(completeUrl, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
         ...headers,
       },

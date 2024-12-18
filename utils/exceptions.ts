@@ -1,20 +1,23 @@
-
-type ExceptionType = "EmailConflictException" | "UserNotFoundException" | "IncorrectCodeException" | "CodeExpiredException";
+type ExceptionType =
+  | "EmailConflictException"
+  | "UserNotFoundException"
+  | "IncorrectCodeException"
+  | "CodeExpiredException";
 
 export class Exception extends Error {
-
   type: ExceptionType;
   statusCode?: number;
-  constructor(
-    error?: any | unknown,
-  ) {
+  constructor(error?: any | unknown) {
     let statusCode: number;
     let message: string;
     if (error) {
-      { statusCode = error.statusCode }
-      { message = error.message }
-    }
-    else {
+      {
+        statusCode = error.statusCode;
+      }
+      {
+        message = error.message;
+      }
+    } else {
       statusCode = 500;
       message = "Something went wrong";
     }
@@ -24,21 +27,19 @@ export class Exception extends Error {
     this.type = this.constructor.type ?? "Exception";
     this.statusCode = statusCode;
   }
-
-
 }
 export class EmailConflictException extends Exception {
-  static type = "EmailConflictException"
+  static type = "EmailConflictException";
 }
 
 export class UserNotFoundExecption extends Exception {
-  static type = "UserNotFoundException"
+  static type = "UserNotFoundException";
 }
 
 export class IncorrectCodeException extends Exception {
-  static type = "IncorrectCodeException"
+  static type = "IncorrectCodeException";
 }
 
 export class CodeExpiredException extends Exception {
-  static type = "CodeExpiredException"
+  static type = "CodeExpiredException";
 }

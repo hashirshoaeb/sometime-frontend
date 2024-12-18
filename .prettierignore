@@ -1,0 +1,39 @@
+# Ignore Node.js build output
+node_modules/
+dist/
+build/
+
+# Ignore Next.js build output
+.next/
+
+# Ignore logs
+*.log
+
+# Ignore package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore public assets and uploads
+public/
+
+# Ignore generated files and artifacts
+coverage/
+out/
+*.d.ts
+
+# Ignore Prettier and ESLint configuration files
+.prettierrc
+.eslintrc.*
+
+# Ignore additional files based on project needs
+.vscode/
+.idea/
+*.tmp
+.DS_Store
+Thumbs.db

@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 // https://stackoverflow.com/questions/77566673/how-to-use-the-meta-viewport-tag-in-nextjs-14-app-router
 export const viewport: Viewport = {
   initialScale: 1,
-  width: 'device-width',
+  width: "device-width",
   maximumScale: 1,
-  viewportFit: 'cover',
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -38,9 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

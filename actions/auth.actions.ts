@@ -9,15 +9,15 @@ export const authenticate = async (data: { phone: string; otp: string }) => {
     const res = await signIn("credentials", {
       phone: data.phone,
       password: data.otp,
-      redirect: true
+      redirect: true,
     });
     println("login successfull", res);
   } catch (error) {
     if (error instanceof AuthError) {
-      return error.cause?.err?.message
+      return error.cause?.err?.message;
     }
     console.error("Error during form submission:", error);
     throw error;
   }
   return undefined;
-}
+};

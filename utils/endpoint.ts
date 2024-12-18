@@ -6,5 +6,5 @@ export const Endpoint: Record<
 > = {
   "auth-send": "auth/send",
   "auth-verify": "auth/verify",
-  "event": "/event"
+  event: "/event",
 };

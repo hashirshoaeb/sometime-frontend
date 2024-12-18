@@ -1,21 +1,32 @@
-import 'react-phone-input-2/lib/style.css'
+import "react-phone-input-2/lib/style.css";
 import PhoneInput, { CountryData } from "react-phone-input-2";
 import { SizeBox } from "../SizeBox";
 import React, { useEffect, useState } from "react";
-import { Modal, ModalContent, useDisclosure } from '@nextui-org/react';
+import { Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import OTPInput from "react-otp-input";
-import { DevicePhoneMobileIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import { resendOtp, sendPhoneNumber, verifyPhoneNumber } from '@/actions/user.actions';
-import { Spinner } from '../Spinner';
+import {
+  DevicePhoneMobileIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline";
+import {
+  resendOtp,
+  sendPhoneNumber,
+  verifyPhoneNumber,
+} from "@/actions/user.actions";
+import { Spinner } from "../Spinner";
 
 interface AuthFlowContextProps {
   onOpen: () => void;
 }
 
-const AuthFlowContext = React.createContext<AuthFlowContextProps | undefined>(undefined);
+const AuthFlowContext = React.createContext<AuthFlowContextProps | undefined>(
+  undefined
+);
 
-export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [phone, setPhone] = React.useState('');
+export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [phone, setPhone] = React.useState("");
   const loginDisclosure = useDisclosure();
   const otpDisclosure = useDisclosure();
 
@@ -24,9 +35,7 @@ export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <AuthFlowContext.Provider
-      value={{ onOpen }}
-    >
+    <AuthFlowContext.Provider value={{ onOpen }}>
       {children}
       <Modal
         placement="bottom"
@@ -39,14 +48,15 @@ export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setPhone={setPhone}
             onClick={() => {
               otpDisclosure.onOpen();
-            }} />
+            }}
+          />
         </ModalContent>
       </Modal>
       <OTPModal
         isOpen={otpDisclosure.isOpen}
         onClose={() => {
-          otpDisclosure.onClose()
-          loginDisclosure.onClose()
+          otpDisclosure.onClose();
+          loginDisclosure.onClose();
         }}
         phoneNumber={phone}
       />
@@ -68,7 +78,11 @@ interface OTPModalProps {
   phoneNumber: string;
 }
 
-function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element {
+function OTPModal({
+  isOpen,
+  onClose,
+  phoneNumber,
+}: OTPModalProps): JSX.Element {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
 
@@ -80,7 +94,7 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
       }, 1000);
       return () => clearInterval(interval); // Cleanup timer
     }
-    return () => { }; // Return an empty cleanup function when isOpen is false
+    return () => {}; // Return an empty cleanup function when isOpen is false
   }, [isOpen]);
 
   async function handleChange(value: string) {
@@ -91,7 +105,9 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
     }
   }
 
-  async function handleResend(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  async function handleResend(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     event.preventDefault();
     await resendOtp(phoneNumber);
     setTimer(30);
@@ -107,9 +123,12 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
     >
       <ModalContent className="p-10">
         <span className="text-center text-gray-700 text-sm leading-none">
-          We have sent a code to <span className="font-semibold">+{phoneNumber}</span>.
+          We have sent a code to{" "}
+          <span className="font-semibold">+{phoneNumber}</span>.
         </span>
-        <span className="text-center text-gray-700 mt-4 text-sm leading-none">Enter it here</span>
+        <span className="text-center text-gray-700 mt-4 text-sm leading-none">
+          Enter it here
+        </span>
 
         <div className="flex justify-center mt-6">
           <OTPInput
@@ -139,21 +158,21 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
                 />
               );
             }}
-          // focusStyle={{
-          //   border: "1px solid #4f46e5",
-          // }}
+            // focusStyle={{
+            //   border: "1px solid #4f46e5",
+            // }}
           />
         </div>
 
         <div className="mt-6 flex items-center justify-start space-x-2">
           <DevicePhoneMobileIcon className="h-5 w-5 text-gray-500" />
           <div>
-            <p className="text-sm text-gray-500">
-              Didn’t receive the code?{" "}
-            </p>
+            <p className="text-sm text-gray-500">Didn’t receive the code? </p>
             <div>
               {timer > 0 ? (
-                <span className="text-red-500">Available in {timer} seconds</span>
+                <span className="text-red-500">
+                  Available in {timer} seconds
+                </span>
               ) : (
                 <button
                   className="text-blue-500 hover:underline"
@@ -173,22 +192,22 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
       </ModalContent>
     </Modal>
   );
-};
-
+}
 
 function Signup({
   phone,
   setPhone,
-  onClick
+  onClick,
 }: {
-  phone: string,
-  setPhone: React.Dispatch<React.SetStateAction<string>>,
-  onClick: ({ }: { phone: string }) => void,
+  phone: string;
+  setPhone: React.Dispatch<React.SetStateAction<string>>;
+  onClick: ({}: { phone: string }) => void;
 }) {
-
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function onButtonPressed(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  async function onButtonPressed(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     event.preventDefault();
     console.log(phone);
     setIsLoading(true);
@@ -197,25 +216,32 @@ function Signup({
     onClick({ phone: phone });
   }
 
-
   return (
     <div className="flex flex-col items-center">
       <h1 className=" text-2xl">Log in / Sign Up</h1>
       <SizeBox height="6px" />
-      <p className=" text-base text-gray-500">Get tickets to unmissable events</p>
+      <p className=" text-base text-gray-500">
+        Get tickets to unmissable events
+      </p>
       <SizeBox height="20px" />
-      <p className=" text-xs">Enter your number to find or create your DICE account.</p>
+      <p className=" text-xs">
+        Enter your number to find or create your DICE account.
+      </p>
       <SizeBox height="20px" />
       <PhoneInput
         placeholder="Mobile Number"
         enableSearch={true}
         containerClass="!w-full"
-        inputClass=' !w-full'
+        inputClass=" !w-full"
         inputProps={{
           autocomplete: "tel",
         }}
         value={phone}
-        onChange={(value: string, data: CountryData, event: React.ChangeEvent<HTMLInputElement>) => {
+        onChange={(
+          value: string,
+          data: CountryData,
+          event: React.ChangeEvent<HTMLInputElement>
+        ) => {
           event.preventDefault();
           setPhone(value);
         }}
@@ -223,11 +249,28 @@ function Signup({
       <SizeBox height="20px" />
       <footer className=" text-xs">
         By signing up you accept our
-        <a target="_blank" rel="noreferrer" href="https://dice.fm/terms_and_conditions.html">terms of use </a>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://dice.fm/terms_and_conditions.html"
+        >
+          terms of use{" "}
+        </a>
         and
-        <a target="_blank" rel="noreferrer" href="https://dice.fm/privacy_policy.html">privacy policy</a>
-        . We’ll text you a code to verify your account (usual rates may apply). We’ll also text you if you opt into text updates about events (frequency varies). To opt out of texts, reply STOP to any of them. For help, go to
-        <a target="_blank" rel="noreferrer" href="https://dice.fm/help/account">dice.fm/help/account</a>.
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://dice.fm/privacy_policy.html"
+        >
+          privacy policy
+        </a>
+        . We’ll text you a code to verify your account (usual rates may apply).
+        We’ll also text you if you opt into text updates about events (frequency
+        varies). To opt out of texts, reply STOP to any of them. For help, go to
+        <a target="_blank" rel="noreferrer" href="https://dice.fm/help/account">
+          dice.fm/help/account
+        </a>
+        .
       </footer>
       <SizeBox height="20px" />
       <button
