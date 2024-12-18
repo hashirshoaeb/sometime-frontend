@@ -1,7 +1,4 @@
-export type Event = {
-  id: string;
-  title: string;
-};
+import { Event } from "@/types/ResponseTypes";
 
 export const events: Event[] = [
   {
