@@ -45,3 +45,12 @@ export async function verifyPhoneNumber(phoneNumber: string, code: string): Prom
     throw new Exception("Invalid OTP");
   }
 }
+
+export async function resendOtp(phoneNumber: string): Promise<LoginUser> {
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  return {
+    id: 1,
+    phone: phoneNumber,
+    isVerified: false,
+  };
+}

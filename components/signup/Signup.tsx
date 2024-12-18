@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { Modal, ModalContent, useDisclosure } from '@nextui-org/react';
 import OTPInput from "react-otp-input";
 import { DevicePhoneMobileIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { resendOtp, sendPhoneNumber, verifyPhoneNumber } from '@/actions/user.actions';
+import { Spinner } from '../Spinner';
 
 interface AuthFlowContextProps {
   onOpen: () => void;
@@ -13,6 +15,7 @@ interface AuthFlowContextProps {
 const AuthFlowContext = React.createContext<AuthFlowContextProps | undefined>(undefined);
 
 export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [phone, setPhone] = React.useState('');
   const loginDisclosure = useDisclosure();
   const otpDisclosure = useDisclosure();
 
@@ -25,24 +28,28 @@ export const AuthFlowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       value={{ onOpen }}
     >
       {children}
-      <>
-        <Modal
-          placement="bottom"
-          isOpen={loginDisclosure.isOpen}
-          onOpenChange={loginDisclosure.onOpenChange}
-        >
-          <ModalContent className="p-10">
-            <Signup onClick={() => {
+      <Modal
+        placement="bottom"
+        isOpen={loginDisclosure.isOpen}
+        onOpenChange={loginDisclosure.onOpenChange}
+      >
+        <ModalContent className="p-10">
+          <Signup
+            phone={phone}
+            setPhone={setPhone}
+            onClick={() => {
               otpDisclosure.onOpen();
             }} />
-          </ModalContent>
-        </Modal>
-        <OTPModal
-          isOpen={otpDisclosure.isOpen}
-          onClose={otpDisclosure.onClose}
-          phoneNumber="+1234567890"
-        />
-      </>
+        </ModalContent>
+      </Modal>
+      <OTPModal
+        isOpen={otpDisclosure.isOpen}
+        onClose={() => {
+          otpDisclosure.onClose()
+          loginDisclosure.onClose()
+        }}
+        phoneNumber={phone}
+      />
     </AuthFlowContext.Provider>
   );
 };
@@ -76,7 +83,19 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
     return () => { }; // Return an empty cleanup function when isOpen is false
   }, [isOpen]);
 
-  const handleChange = (value: string) => setOtp(value);
+  async function handleChange(value: string) {
+    setOtp(value);
+    if (value.length === 4) {
+      await verifyPhoneNumber(phoneNumber, value);
+      onClose();
+    }
+  }
+
+  async function handleResend(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.preventDefault();
+    await resendOtp(phoneNumber);
+    setTimer(30);
+  }
 
   return (
     <Modal
@@ -88,7 +107,7 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
     >
       <ModalContent className="p-10">
         <span className="text-center text-gray-700 text-sm leading-none">
-          We have sent a code to <span className="font-semibold">{phoneNumber}</span>.
+          We have sent a code to <span className="font-semibold">+{phoneNumber}</span>.
         </span>
         <span className="text-center text-gray-700 mt-4 text-sm leading-none">Enter it here</span>
 
@@ -138,7 +157,7 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
               ) : (
                 <button
                   className="text-blue-500 hover:underline"
-                  onClick={() => setTimer(30)} // Reset timer for demonstration
+                  onClick={handleResend} // Reset timer for demonstration
                 >
                   Resend
                 </button>
@@ -146,9 +165,7 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
             </div>
           </div>
         </div>
-
         <hr className="my-4 border-gray-200" />
-
         <div className="flex items-center justify-start space-x-2">
           <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500" />
           <p className="text-sm text-gray-500">Need help?</p>
@@ -159,8 +176,26 @@ function OTPModal({ isOpen, onClose, phoneNumber }: OTPModalProps): JSX.Element 
 };
 
 
-function Signup({ onClick }: { onClick: () => void }) {
-  const [phone, setPhone] = React.useState('');
+function Signup({
+  phone,
+  setPhone,
+  onClick
+}: {
+  phone: string,
+  setPhone: React.Dispatch<React.SetStateAction<string>>,
+  onClick: ({ }: { phone: string }) => void,
+}) {
+
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  async function onButtonPressed(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.preventDefault();
+    console.log(phone);
+    setIsLoading(true);
+    const response = await sendPhoneNumber(phone);
+    setIsLoading(false);
+    onClick({ phone: phone });
+  }
 
 
   return (
@@ -179,11 +214,11 @@ function Signup({ onClick }: { onClick: () => void }) {
         inputProps={{
           autocomplete: "tel",
         }}
-      // value={phone}
-      // onChange={(value: string, data: CountryData, event: React.ChangeEvent<HTMLInputElement>) => {
-      //   event.preventDefault();
-      //   setPhone(value);
-      // }}
+        value={phone}
+        onChange={(value: string, data: CountryData, event: React.ChangeEvent<HTMLInputElement>) => {
+          event.preventDefault();
+          setPhone(value);
+        }}
       />
       <SizeBox height="20px" />
       <footer className=" text-xs">
@@ -195,8 +230,12 @@ function Signup({ onClick }: { onClick: () => void }) {
         <a target="_blank" rel="noreferrer" href="https://dice.fm/help/account">dice.fm/help/account</a>.
       </footer>
       <SizeBox height="20px" />
-      <button onClick={onClick} className=" self-start bg-black text-white py-2 px-4 rounded-full">
-        Next
+      <button
+        onClick={onButtonPressed}
+        className="self-start bg-black text-white py-2 px-4 rounded-full"
+        disabled={isLoading}
+      >
+        {isLoading ? <Spinner color="main-font" size="xs" /> : "Next"}
       </button>
     </div>
   );
