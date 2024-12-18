@@ -1,6 +1,8 @@
+"use server";
+import { getEvents } from "@/actions/events.actions";
 import { EventQueue } from "./pageClient";
 
-export default function Home({
+export default async function Home({
 
   searchParams,
 }: {
@@ -9,10 +11,11 @@ export default function Home({
 }) {
 
   const uid = searchParams?.uid as (string | undefined) ?? "";
+  const events = await getEvents();
 
   return (
     <div className="">
-      <EventQueue uid={uid} />
+      <EventQueue uid={uid} events={events} />
     </div>
   );
 }

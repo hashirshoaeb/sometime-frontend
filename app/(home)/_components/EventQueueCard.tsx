@@ -1,4 +1,5 @@
-import { Event } from "@/database/events";
+
+import { Event } from "@/types/ResponseTypes";
 import Link from "next/link";
 
 export function EventQueueCard({ id, event }: { id: string, event: Event }) {

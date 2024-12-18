@@ -1,4 +1,4 @@
-export type EndpointType = "auth-send" | "auth-verify";
+export type EndpointType = "auth-send" | "auth-verify" | "event";
 
 export const Endpoint: Record<
   EndpointType,
@@ -6,4 +6,5 @@ export const Endpoint: Record<
 > = {
   "auth-send": "auth/send",
   "auth-verify": "auth/verify",
+  "event": "/event"
 };

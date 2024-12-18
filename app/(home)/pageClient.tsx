@@ -1,11 +1,11 @@
 "use client";
 
-import { events } from "@/database/events";
 import { EventQueueCard } from "./_components/EventQueueCard";
 import { useEffect, useState } from "react";
 import { useAuthFlow } from "@/components/signup/Signup";
+import { Event } from "@/types/ResponseTypes";
 
-export function EventQueue({ uid }: { uid?: string }) {
+export function EventQueue({ uid, events }: { uid?: string, events: Event[] }) {
   const { onOpen } = useAuthFlow();
 
   useEffect(() => {
