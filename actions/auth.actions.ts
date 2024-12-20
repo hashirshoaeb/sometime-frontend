@@ -9,8 +9,9 @@ export const authenticate = async (data: { phone: string; otp: string }) => {
     const res = await signIn("credentials", {
       phone: data.phone,
       password: data.otp,
-      redirect: true,
+      redirect: false,
     });
+
     println("login successfull", res);
   } catch (error) {
     if (error instanceof AuthError) {

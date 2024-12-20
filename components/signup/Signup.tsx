@@ -1,3 +1,4 @@
+"use client";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput, { CountryData } from "react-phone-input-2";
 import { SizeBox } from "../SizeBox";
@@ -14,6 +15,8 @@ import {
   verifyPhoneNumber,
 } from "@/actions/user.actions";
 import { Spinner } from "../Spinner";
+import { authenticate } from "@/actions/auth.actions";
+import { __NEXTAUTH } from "next-auth/react";
 
 interface AuthFlowContextProps {
   onOpen: () => void;
@@ -94,13 +97,15 @@ function OTPModal({
       }, 1000);
       return () => clearInterval(interval); // Cleanup timer
     }
-    return () => {}; // Return an empty cleanup function when isOpen is false
+    return () => { }; // Return an empty cleanup function when isOpen is false
   }, [isOpen]);
 
   async function handleChange(value: string) {
     setOtp(value);
     if (value.length === 4) {
-      await verifyPhoneNumber(phoneNumber, value);
+      await authenticate({ phone: phoneNumber, otp: value });
+      // https://github.com/nextauthjs/next-auth/issues/1264#issuecomment-2556295196
+      await __NEXTAUTH._getSession({ event: "storage" });
       onClose();
     }
   }
@@ -158,9 +163,9 @@ function OTPModal({
                 />
               );
             }}
-            // focusStyle={{
-            //   border: "1px solid #4f46e5",
-            // }}
+          // focusStyle={{
+          //   border: "1px solid #4f46e5",
+          // }}
           />
         </div>
 
@@ -201,7 +206,7 @@ function Signup({
 }: {
   phone: string;
   setPhone: React.Dispatch<React.SetStateAction<string>>;
-  onClick: ({}: { phone: string }) => void;
+  onClick: ({ }: { phone: string }) => void;
 }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -234,7 +239,7 @@ function Signup({
         containerClass="!w-full"
         inputClass=" !w-full"
         inputProps={{
-          autocomplete: "tel",
+          autoComplete: "tel",
         }}
         value={phone}
         onChange={(
